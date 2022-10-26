@@ -42,3 +42,9 @@ def authorize():
     user = db.session.scalar(stmt)
     if not user.is_admin:
         abort(401)
+
+@auth_bp.route('/users/')
+def get_users():
+    stmt = db.select(User)
+    users = db.session.scalars(stmt)
+    return UserSchema(many=True, exclude=['password']).dump(users)
